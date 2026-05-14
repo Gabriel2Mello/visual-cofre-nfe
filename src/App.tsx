@@ -22,7 +22,8 @@ function App() {
   const [text, setText] = useState<string>("");
   const [mesNota, setMesNota] = useState<number>(mesAtual);
   const [mesPasta, setMesPasta] = useState<number>(mesAtual);
-  const [tipoEmpresa, setTipoEmpresa] = useState<string>("Filial")
+  const [tipoEmpresa, setTipoEmpresa] = useState<string>("FILIAL")
+  const [tipoNota, setTipoNota] = useState<string>("nfe")
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -30,6 +31,10 @@ function App() {
 
   const handleEmpresaChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTipoEmpresa(e.target.value)
+  }
+
+  const handleTipoNotaChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTipoNota(e.target.value)
   }
 
   return (
@@ -77,8 +82,8 @@ function App() {
             <label className="custom-checkbox">
               <input
                 type="radio"
-                value="Matriz"
-                checked={tipoEmpresa === "Matriz"}
+                value="MATRIZ"
+                checked={tipoEmpresa === "MATRIZ"}
                 onChange={handleEmpresaChange}
               />
               <span className="checkmark"></span>
@@ -88,14 +93,39 @@ function App() {
             <label className="custom-checkbox">
               <input
                 type="radio"
-                value="Filial"
-                checked={tipoEmpresa === "Filial"}
+                value="FILIAL"
+                checked={tipoEmpresa === "FILIAL"}
                 onChange={handleEmpresaChange}
               />
               <span className="checkmark"></span>
               Filial
             </label>
+
+            <label className="custom-checkbox">
+              <input
+                type="radio"
+                value="nfe"
+                checked={tipoNota === "nfe"}
+                onChange={handleTipoNotaChange}
+              />
+              <span className="checkmark"></span>
+              NF-e
+            </label>
+
+            <label className="custom-checkbox">
+              <input
+                type="radio"
+                value="cte"
+                checked={tipoNota === "cte"}
+                onChange={handleTipoNotaChange}
+              />
+              <span className="checkmark"></span>
+              CT-e
+            </label>
+
           </div>
+
+          <div id="spacer"></div>
 
           <p>
             Selecionado: {tipoEmpresa} -
