@@ -13,15 +13,15 @@ interface FormState {
 }
 
 const meses = [
-  { valor: 1, nome: 'Janeiro' },
-  { valor: 2, nome: 'Fevereiro' },
-  { valor: 3, nome: 'Março' },
-  { valor: 4, nome: 'Abril' },
-  { valor: 5, nome: 'Maio' },
-  { valor: 6, nome: 'Junho' },
-  { valor: 7, nome: 'Julho' },
-  { valor: 8, nome: 'Agosto' },
-  { valor: 9, nome: 'Setembro' },
+  { valor: 1,  nome: 'Janeiro' },
+  { valor: 2,  nome: 'Fevereiro' },
+  { valor: 3,  nome: 'Março' },
+  { valor: 4,  nome: 'Abril' },
+  { valor: 5,  nome: 'Maio' },
+  { valor: 6,  nome: 'Junho' },
+  { valor: 7,  nome: 'Julho' },
+  { valor: 8,  nome: 'Agosto' },
+  { valor: 9,  nome: 'Setembro' },
   { valor: 10, nome: 'Outubro' },
   { valor: 11, nome: 'Novembro' },
   { valor: 12, nome: 'Dezembro' }
@@ -50,13 +50,16 @@ function App() {
   const nomeMesPasta = meses.find(m => m.valor === form.mesPasta)?.nome;
   const mesNotaFormatado = form.mesNota.toString().padStart(2, '0');
 
+  const siglaNota = form.tipoNota === 'nfe' ? 'NF-e' : 'CT-e';
+  const mensagemSelecionado = `Selecionado: (${form.tipoEmpresa}) ${siglaNota} do mês ${mesNotaFormatado} para salvar na pasta de ${nomeMesPasta}`;
+
   return (
     <>
       <section id="center">
         <div>
           <h1>Visual Cofre</h1>
 
-          <div className="input-container">
+          <div className="input-container-search">
             <input
               type="text"
               name="text"
@@ -64,6 +67,10 @@ function App() {
               onChange={handleInputChange}
               placeholder="Digite a nota..."
             />
+
+            <button type="button" className="input-button">
+              Buscar
+            </button>
           </div>
 
           <div className="select-container">
@@ -97,63 +104,62 @@ function App() {
           </div>
 
           <div className="radio-container">
-            <label className="custom-checkbox">
-              <input
-                type="radio"
-                name="tipoEmpresa"
-                value="MATRIZ"
-                checked={form.tipoEmpresa === 'MATRIZ'}
-                onChange={handleInputChange}
-              />
-              <span className="checkmark"></span>
-              Matriz
-            </label>
+            <div className="radio-group">
+              <label className="custom-checkbox">
+                <input
+                  type="radio"
+                  name="tipoEmpresa"
+                  value="MATRIZ"
+                  checked={form.tipoEmpresa === 'MATRIZ'}
+                  onChange={handleInputChange}
+                />
+                <span className="checkmark"></span>
+                Matriz
+              </label>
 
-            <label className="custom-checkbox">
-              <input
-                type="radio"
-                name="tipoEmpresa"
-                value="FILIAL"
-                checked={form.tipoEmpresa === 'FILIAL'}
-                onChange={handleInputChange}
-              />
-              <span className="checkmark"></span>
-              Filial
-            </label>
+              <label className="custom-checkbox">
+                <input
+                  type="radio"
+                  name="tipoEmpresa"
+                  value="FILIAL"
+                  checked={form.tipoEmpresa === 'FILIAL'}
+                  onChange={handleInputChange}
+                />
+                <span className="checkmark"></span>
+                Filial
+              </label>
+            </div>
 
-            <label className="custom-checkbox">
-              <input
-                type="radio"
-                name="tipoNota"
-                value="nfe"
-                checked={form.tipoNota === 'nfe'}
-                onChange={handleInputChange}
-              />
-              <span className="checkmark"></span>
-              NF-e
-            </label>
+            <div className="radio-group">
+              <label className="custom-checkbox">
+                <input
+                  type="radio"
+                  name="tipoNota"
+                  value="nfe"
+                  checked={form.tipoNota === 'nfe'}
+                  onChange={handleInputChange}
+                />
+                <span className="checkmark"></span>
+                NF-e
+              </label>
 
-            <label className="custom-checkbox">
-              <input
-                type="radio"
-                name="tipoNota"
-                value="cte"
-                checked={form.tipoNota === 'cte'}
-                onChange={handleInputChange}
-              />
-              <span className="checkmark"></span>
-              CT-e
-            </label>
-
+              <label className="custom-checkbox">
+                <input
+                  type="radio"
+                  name="tipoNota"
+                  value="cte"
+                  checked={form.tipoNota === 'cte'}
+                  onChange={handleInputChange}
+                />
+                <span className="checkmark"></span>
+                CT-e
+              </label>
+            </div>
           </div>
 
           <div id="spacer"></div>
 
-          <p>
-            Selecionado: ({form.tipoEmpresa})
-            {form.tipoNota === 'nfe' ? ' NF-e' : ' CT-e'} do mês {mesNotaFormatado} para
-            salvar na pasta de {nomeMesPasta}
-          </p>
+          <p>{mensagemSelecionado}</p>
         </div>
       </section>
 
@@ -162,3 +168,4 @@ function App() {
 }
 
 export default App
+
