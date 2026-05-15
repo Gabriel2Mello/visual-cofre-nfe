@@ -1,41 +1,54 @@
-import { useState, type ChangeEvent } from 'react'
-import './App.css'
+import { useState, type ChangeEvent } from 'react';
+import './App.css';
+
+type TipoEmpresa = 'MATRIZ' | 'FILIAL';
+type TipoNota = 'nfe' | 'cte';
+
+interface FormState {
+  text: string;
+  mesNota: number;
+  mesPasta: number;
+  tipoEmpresa: TipoEmpresa;
+  tipoNota: TipoNota;
+}
 
 const meses = [
-  { valor: 1, nome: "Janeiro" },
-  { valor: 2, nome: "Fevereiro" },
-  { valor: 3, nome: "Março" },
-  { valor: 4, nome: "Abril" },
-  { valor: 5, nome: "Maio" },
-  { valor: 6, nome: "Junho" },
-  { valor: 7, nome: "Julho" },
-  { valor: 8, nome: "Agosto" },
-  { valor: 9, nome: "Setembro" },
-  { valor: 10, nome: "Outubro" },
-  { valor: 11, nome: "Novembro" },
-  { valor: 12, nome: "Dezembro" }
-]
+  { valor: 1, nome: 'Janeiro' },
+  { valor: 2, nome: 'Fevereiro' },
+  { valor: 3, nome: 'Março' },
+  { valor: 4, nome: 'Abril' },
+  { valor: 5, nome: 'Maio' },
+  { valor: 6, nome: 'Junho' },
+  { valor: 7, nome: 'Julho' },
+  { valor: 8, nome: 'Agosto' },
+  { valor: 9, nome: 'Setembro' },
+  { valor: 10, nome: 'Outubro' },
+  { valor: 11, nome: 'Novembro' },
+  { valor: 12, nome: 'Dezembro' }
+];
 
 function App() {
   const mesAtual = new Date().getMonth() + 1;
 
-  const [text, setText] = useState<string>("");
-  const [mesNota, setMesNota] = useState<number>(mesAtual);
-  const [mesPasta, setMesPasta] = useState<number>(mesAtual);
-  const [tipoEmpresa, setTipoEmpresa] = useState<string>("FILIAL")
-  const [tipoNota, setTipoNota] = useState<string>("nfe")
+  const [form, setForm] = useState<FormState>({
+    text: '',
+    mesNota: mesAtual,
+    mesPasta: mesAtual,
+    tipoEmpresa: 'FILIAL',
+    tipoNota: 'nfe'
+  })
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
-  }
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
 
-  const handleEmpresaChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTipoEmpresa(e.target.value)
-  }
+    setForm(prev => ({
+      ...prev,
+      [name]: name.startsWith('mes') ? parseInt(value) : value
+    }));
+  };
 
-  const handleTipoNotaChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTipoNota(e.target.value)
-  }
+  const nomeMesPasta = meses.find(m => m.valor === form.mesPasta)?.nome;
+  const mesNotaFormatado = form.mesNota.toString().padStart(2, '0');
 
   return (
     <>
@@ -46,17 +59,20 @@ function App() {
           <div className="input-container">
             <input
               type="text"
-              value={text}
-              onChange={handleChange}
+              name="text"
+              value={form.text}
+              onChange={handleInputChange}
               placeholder="Digite a nota..."
             />
           </div>
 
           <div className="select-container">
-            <label>Mês da Nota:</label>
+            <label htmlFor="mesNota">Mês da Nota:</label>
             <select
-              value={mesNota}
-              onChange={(e) => setMesNota(parseInt(e.target.value))}
+              id="mesNota"
+              name="mesNota"
+              value={form.mesNota}
+              onChange={handleInputChange}
             >
               {meses.map((mes) => (
                 <option key={mes.valor} value={mes.valor}>
@@ -65,10 +81,12 @@ function App() {
               ))}
             </select>
 
-            <label>Pasta:</label>
+            <label htmlFor="mesPasta">Pasta:</label>
             <select
-              value={mesPasta}
-              onChange={(e) => setMesPasta(parseInt(e.target.value))}
+              id="mesPasta"
+              name="mesPasta"
+              value={form.mesPasta}
+              onChange={handleInputChange}
             >
               {meses.map((mes) => (
                 <option key={mes.valor} value={mes.valor}>
@@ -82,9 +100,10 @@ function App() {
             <label className="custom-checkbox">
               <input
                 type="radio"
+                name="tipoEmpresa"
                 value="MATRIZ"
-                checked={tipoEmpresa === "MATRIZ"}
-                onChange={handleEmpresaChange}
+                checked={form.tipoEmpresa === 'MATRIZ'}
+                onChange={handleInputChange}
               />
               <span className="checkmark"></span>
               Matriz
@@ -93,9 +112,10 @@ function App() {
             <label className="custom-checkbox">
               <input
                 type="radio"
+                name="tipoEmpresa"
                 value="FILIAL"
-                checked={tipoEmpresa === "FILIAL"}
-                onChange={handleEmpresaChange}
+                checked={form.tipoEmpresa === 'FILIAL'}
+                onChange={handleInputChange}
               />
               <span className="checkmark"></span>
               Filial
@@ -104,9 +124,10 @@ function App() {
             <label className="custom-checkbox">
               <input
                 type="radio"
+                name="tipoNota"
                 value="nfe"
-                checked={tipoNota === "nfe"}
-                onChange={handleTipoNotaChange}
+                checked={form.tipoNota === 'nfe'}
+                onChange={handleInputChange}
               />
               <span className="checkmark"></span>
               NF-e
@@ -115,9 +136,10 @@ function App() {
             <label className="custom-checkbox">
               <input
                 type="radio"
+                name="tipoNota"
                 value="cte"
-                checked={tipoNota === "cte"}
-                onChange={handleTipoNotaChange}
+                checked={form.tipoNota === 'cte'}
+                onChange={handleInputChange}
               />
               <span className="checkmark"></span>
               CT-e
@@ -128,9 +150,9 @@ function App() {
           <div id="spacer"></div>
 
           <p>
-            Selecionado: {tipoEmpresa} -
-            Nota do mês {mesNota.toString().padStart(2, "0")} para
-            salvar na pasta de {meses.find(m => m.valor === mesPasta)?.nome}
+            Selecionado: ({form.tipoEmpresa})
+            {form.tipoNota === 'nfe' ? ' NF-e' : ' CT-e'} do mês {mesNotaFormatado} para
+            salvar na pasta de {nomeMesPasta}
           </p>
         </div>
       </section>
