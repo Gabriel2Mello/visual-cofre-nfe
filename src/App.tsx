@@ -12,6 +12,11 @@ interface FormState {
   tipoNota: TipoNota;
 }
 
+interface ConfigCofre {
+  loginCofre: string;
+  senhaCofre: string;
+}
+
 const meses = [
   { valor: 1,  nome: 'Janeiro' },
   { valor: 2,  nome: 'Fevereiro' },
@@ -38,6 +43,13 @@ function App() {
     tipoNota: 'nfe'
   })
 
+  const [isModelOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const [config, setConfig] = useState<ConfigCofre>({
+    loginCofre: '',
+    senhaCofre: ''
+  });
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
@@ -45,6 +57,17 @@ function App() {
       ...prev,
       [name]: name.startsWith('mes') ? parseInt(value) : value
     }));
+  };
+
+  const handleConfigChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setConfig(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveConfig = (e: FormEvent) => {
+    e.preventDefault();
+    console.log('Configurações salvas:', config);
+    setIsModalOpen(false);
   };
 
   const nomeMesPasta = meses.find(m => m.valor === form.mesPasta)?.nome;
@@ -55,6 +78,15 @@ function App() {
 
   return (
     <>
+      <button
+        type="button"
+        className="settings-button"
+        onClick={() => setIsModalOpen(true)}
+        aria-label="Configurações Cofre"
+      >
+        ⚙️
+      </button>
+
       <section id="center">
         <div>
           <h1>Visual Cofre</h1>
@@ -162,6 +194,75 @@ function App() {
           <p>{mensagemSelecionado}</p>
         </div>
       </section>
+
+
+      {isModelOpen && (
+        <div
+          className="modal-overlay"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-header">
+              <h2>Configurações Cofre</h2>
+              <button
+                className="close-button"
+                onClick={() => setIsModalOpen(false)}
+              >
+                &times;
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveConfig}>
+              <div className="modal-body">
+                <div className="form-group">
+                  <label htmlFor="loginCofre">CNPJ:</label>
+                  <input
+                    type="text"
+                    id="loginCofre"
+                    name="loginCofre"
+                    value={config.loginCofre}
+                    onChange={handleConfigChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="senhaCofre">Senha:</label>
+                  <input
+                    type="password"
+                    id="senhaCofre"
+                    name="senhaCofre"
+                    value={config.senhaCofre}
+                    onChange={handleConfigChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  className="btn-primary"
+                >
+                  Salvar
+                </button>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      )}
 
     </>
   )
