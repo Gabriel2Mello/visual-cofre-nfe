@@ -1,5 +1,5 @@
 import './ConfigModal.css'
-import { type ChangeEvent, type FormEvent } from 'react';
+import { type ChangeEvent, type FormEvent, useRef, useEffect } from 'react';
 import { type ConfigCofre } from '@/types';
 
 interface ConfigModalProps {
@@ -11,6 +11,14 @@ interface ConfigModalProps {
 }
 
 export function ConfigModal({ isOpen, onClose, config, onConfigChange, onSave }: ConfigModalProps) {
+  const loginCofreInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      loginCofreInputRef.current?.focus();
+    }
+  }, [isOpen])
+
   if (!isOpen) return null;
 
   return (
@@ -29,6 +37,7 @@ export function ConfigModal({ isOpen, onClose, config, onConfigChange, onSave }:
             <div className="form-group">
               <label htmlFor="loginCofre">CNPJ</label>
               <input
+                ref={loginCofreInputRef}
                 type="text"
                 id="loginCofre"
                 name="loginCofre"
@@ -48,6 +57,16 @@ export function ConfigModal({ isOpen, onClose, config, onConfigChange, onSave }:
                 onChange={onConfigChange}
                 required
               />
+            </div>
+
+            <div className="form-group">
+              <button
+                type="button"
+                className="btn-search"
+              >
+                Caminho Documento Entrada
+              </button>
+
             </div>
           </div>
 

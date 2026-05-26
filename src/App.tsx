@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { useState, type ChangeEvent, type FormEvent, useEffect } from 'react';
 import { FiltroNotas } from '@/components/FiltroNotas';
 import { ConfigModal } from '@/components/ConfigModal';
 import { type FormState, type ConfigCofre } from '@/types';
@@ -22,6 +22,17 @@ function App() {
     senhaCofre: ''
   });
 
+  useEffect(() => {
+    try {
+      const savedConfig = localStorage.getItem('appConfigCofre');
+      if (savedConfig) {
+        setConfig(JSON.parse(savedConfig));
+      }
+    } catch (error) {
+      console.error('Fail to load config from local:', error);
+    }
+  }, []);
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
@@ -39,6 +50,9 @@ function App() {
   const handleSaveConfig = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Configurações salvas:', config);
+
+    localStorage.setItem('appConfigCofre', JSON.stringify(config));
+
     setIsModalOpen(false);
   };
 
