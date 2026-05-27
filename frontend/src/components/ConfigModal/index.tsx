@@ -64,7 +64,7 @@ export function ConfigModal({ isOpen, onClose, config, onConfigChange, onSave }:
                 type="button"
                 className="btn-search"
               >
-                Caminho Documento Entrada
+                Selecionar Pasta
               </button>
 
             </div>
