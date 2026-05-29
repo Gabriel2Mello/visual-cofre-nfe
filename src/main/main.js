@@ -23,30 +23,31 @@ function createWindow() {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
-
-  app.whenReady().then(() => {
-    electron.setAppUserModelId('com.electron')
-
-    app.on('browser-window-created', (_, window) => {
-      optimizer.watchWindowShortcuts(window)
-    })
-
-    ipcMain.handle('select-folder', async () => {
-      const result = await dialog.showOpenDialog({
-        properties: ['openDirectory']
-      })
-      return result.filePaths[0]
-    })
-
-    ipcMain.handle('save-file', async (_, { folderPath, fileName, content }) => {
-      const fs = require('fs')
-      const path = require('path')
-      const fullPath = path.join(folderPath, fileName)
-
-      fs.writeFileSync(fullPath, content, 'utf-8')
-      return true
-    })
-    createWindow()
-  })
 }
+
+app.whenReady().then(() => {
+  app.setAppUserModelId('com.electron')
+
+  app.on('browser-window-created', (_, window) => {
+    optimizer.watchWindowShortcuts(window)
+  })
+
+  ipcMain.handle('select-folder', async () => {
+    const result = await dialog.showOpenDialog({
+      properties: ['openDirectory']
+    })
+    return result.filePaths[0]
+  })
+
+  ipcMain.handle('save-file', async (_, { folderPath, fileName, content }) => {
+    const fs = require('fs')
+    const path = require('path')
+    const fullPath = path.join(folderPath, fileName)
+
+    fs.writeFileSync(fullPath, content, 'utf-8')
+    return true
+  })
+
+  createWindow()
+})
 
