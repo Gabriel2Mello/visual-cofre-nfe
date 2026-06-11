@@ -9,8 +9,9 @@ function createWindow() {
     show: false,
     autoHideMenuBar: true,
     webPreferences: {
-      preload: join(__dirname, '../preload/preload.js'),
-      sandbox: false
+      preload: join(__dirname, '../preload/index.mjs'),
+      sandbox: false,
+      contextIsolation: true,
     }
   })
 
@@ -20,6 +21,8 @@ function createWindow() {
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+
+    mainWindow.webContents.openDevTools()
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
@@ -46,6 +49,19 @@ app.whenReady().then(() => {
 
     fs.writeFileSync(fullPath, content, 'utf-8')
     return true
+  })
+
+  ipcMain.handle('show-native-alert', async (event, message) => {
+    const focusedWindow = BrowserWindow.getFocusedWindow();
+
+    dialog.showMessageBoxSync(focusedWindow, {
+      type: 'error', // Can be 'none', 'info', 'warning', 'error'
+      title: 'Alerta',
+      message: message,
+      buttons: ['OK']
+    })
+
+    return true;
   })
 
   createWindow()

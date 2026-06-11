@@ -97,3 +97,12 @@
 .btn-primary:hover { background-color: #0056b3; }
 .btn-secondary:hover { background-color: #5a6268; }
 .btn-search:hover { background-color: #535bf2;}
+
+.preview-caminho {
+  font-size: 12px;
+  margin-top: 6px;
+  color: #aaa;
+  word-break: break-all;
+  font-style: italic;
+}
+

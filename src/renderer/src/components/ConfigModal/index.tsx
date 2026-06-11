@@ -7,10 +7,11 @@ interface ConfigModalProps {
   onClose: () => void;
   config: ConfigCofre;
   onConfigChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onSelectFolder: () => void;
   onSave: (e: FormEvent<HTMLFormElement>) => void;
 }
 
-export function ConfigModal({ isOpen, onClose, config, onConfigChange, onSave }: ConfigModalProps) {
+export function ConfigModal({ isOpen, onClose, config, onConfigChange, onSelectFolder, onSave }: ConfigModalProps) {
   const loginCofreInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -63,9 +64,13 @@ export function ConfigModal({ isOpen, onClose, config, onConfigChange, onSave }:
               <button
                 type="button"
                 className="btn-search"
+                onClick={onSelectFolder}
               >
                 Selecionar Pasta
               </button>
+              <span className="preview-caminho">
+                {config.caminhoSalvamento || "Nenhuma pasta selecionada"}
+              </span>
 
             </div>
           </div>

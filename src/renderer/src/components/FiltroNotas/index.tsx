@@ -5,9 +5,10 @@ import { type FormState, meses } from '@/types'
 interface FiltroNotasProps {
   form: FormState;
   onInputChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  onBuscar: () => void;
 }
 
-export function FiltroNotas({ form, onInputChange}: FiltroNotasProps) {
+export function FiltroNotas({ form, onInputChange, onBuscar}: FiltroNotasProps) {
   const nomeMesPasta = meses.find(m => m.valor === form.mesPasta)?.nome;
   const mesNotaFormatado = form.mesNota.toString().padStart(2, '0');
   const siglaNota = form.tipoNota === 'nfe' ? 'NF-e' : 'CT-e';
@@ -28,7 +29,11 @@ export function FiltroNotas({ form, onInputChange}: FiltroNotasProps) {
             placeholder="Digite a nota..."
           />
 
-          <button type="button" className="input-button">
+          <button
+            type="button"
+            className="input-button"
+            onClick={onBuscar}
+          >
             Buscar
           </button>
         </div>
