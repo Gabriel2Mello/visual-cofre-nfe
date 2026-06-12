@@ -12,7 +12,7 @@ export interface FormState {
 export interface ConfigCofre {
   loginCofre: string;
   senhaCofre: string;
-  caminhoSalvamento: string;
+  caminhoDestino: string;
 }
 
 export const meses = [

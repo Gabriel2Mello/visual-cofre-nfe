@@ -69,7 +69,7 @@ export function ConfigModal({ isOpen, onClose, config, onConfigChange, onSelectF
                 Selecionar Pasta
               </button>
               <span className="preview-caminho">
-                {config.caminhoSalvamento || "Nenhuma pasta selecionada"}
+                {config.caminhoDestino || "Nenhuma pasta selecionada"}
               </span>
 
             </div>

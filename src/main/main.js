@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
+import { writeFileSync } from 'fs'
 import { optimizer, is } from '@electron-toolkit/utils'
 
 function createWindow() {
@@ -22,7 +23,6 @@ function createWindow() {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
 
-    mainWindow.webContents.openDevTools()
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
@@ -43,11 +43,9 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('save-file', async (_, { folderPath, fileName, content }) => {
-    const fs = require('fs')
-    const path = require('path')
-    const fullPath = path.join(folderPath, fileName)
+    const fullPath = join(folderPath, fileName)
 
-    fs.writeFileSync(fullPath, content, 'utf-8')
+    writeFileSync(fullPath, content, 'utf-8')
     return true
   })
 

@@ -13,7 +13,7 @@ function App() {
     mesNota: mesAtual,
     mesPasta: mesAtual,
     tipoEmpresa: 'FILIAL',
-    tipoNota: 'nfe'
+    tipoNota: 'nfe',
   })
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -22,7 +22,7 @@ function App() {
   const [config, setConfig] = useState<ConfigCofre>({
     loginCofre: '',
     senhaCofre: '',
-    caminhoSalvamento: '',
+    caminhoDestino: '',
   });
 
   useEffect(() => {
@@ -82,11 +82,15 @@ function App() {
   };
 
   const handleSelectFolder = async () => {
-    if (window.electron && typeof window.electron.selectFolder === 'function') {
-      const folderPath = await window.electron.selectFolder();
+    const api = window.electronAPI;
+
+    if (api && typeof api.selectFolder === 'function') {
+      const folderPath = await api.selectFolder();
+
       if (folderPath) {
-        setConfig(prev => ({ ...prev, caminhoSalvamento: folderPath}));
+        setConfig(prev => ({ ...prev, caminhoDestino: folderPath}));
       }
+
     } else {
       Swal.fire({
         text: 'A seleção de pastas só funciona rodando dentro do aplicativo Electron!',
@@ -106,9 +110,10 @@ function App() {
   };
  
   const handleBuscarNotas = async () => {
-    if (!config.loginCofre || !config.senhaCofre || !config.caminhoSalvamento) {
-      //if (window.electron && window.electron.ipcRenderer) {
-        await window.electron.showAlert('Configure o CNPJ, Senha e a Pasta de Destino.');
+    if (!config.loginCofre || !config.senhaCofre || !config.caminhoDestino) {
+      const api = window.electronAPI;
+      //if (window.electronAPI && window.electronAPI.ipcRenderer) {
+        await api.showAlert('Configure o CNPJ, Senha e a Pasta de Destino.');
       //}
      // Swal.fire({
      //   text: 'Configure o CNPJ, Senha e a Pasta de Destino.',
@@ -137,7 +142,7 @@ function App() {
           mes_nota: form.mesNota,
           mes_pasta: form.mesPasta,
           tipo: form.tipoNota,
-          caminho_salvamento: config.caminhoSalvamento,
+          caminho_destino: config.caminhoDestino,
           cnpj_matriz: config.loginCofre,
           senha_cofre: config.senhaCofre,
         })
