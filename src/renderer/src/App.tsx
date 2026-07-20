@@ -112,13 +112,7 @@ function App() {
   const handleBuscarNotas = async () => {
     if (!config.loginCofre || !config.senhaCofre || !config.caminhoDestino) {
       const api = window.electronAPI;
-      //if (window.electronAPI && window.electronAPI.ipcRenderer) {
         await api.showAlert('Configure o CNPJ, Senha e a Pasta de Destino.');
-      //}
-     // Swal.fire({
-     //   text: 'Configure o CNPJ, Senha e a Pasta de Destino.',
-     //   icon: 'warning',
-     // });
       setIsModalOpen(true);
       return;
     }
